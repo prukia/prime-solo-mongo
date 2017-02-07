@@ -1,0 +1,32 @@
+use upsilon
+switched to db upsilon
+// 1. Create a collection named orders
+db.orders
+upsilon.orders
+// 2,  Insert at least 3 documents that represent an order.
+db.orders.insert({ orderDate: new Date(2016-11-05), orderTotal: 50.00, lineItems: [ {unitPrice: 2.00, quantity: 10, productName: 'chocolate' }, ] })
+WriteResult({ "nInserted" : 1 })
+...
+db.orders.insert({ orderDate: new Date(), orderTotal: 60.00, lineItems: [ {unitPrice: 3.00, quantity: 12, productName: 'strawberry' }, ] })
+WriteResult({ "nInserted" : 1 })
+db.orders.insert({ orderDate: new Date(2015-12-01), orderTotal: 70.00, lineItems: [ {unitPrice: 5.00, quantity: 13, productName: 'cake' }, ] })
+WriteResult({ "nInserted" : 1 })
+// 3. Find a single order document, any order document.
+db.orders.find({_id: ObjectId("589a224b91930bc237484361")})
+// 4. Find all orders and make them look pretty
+db.orders.find().pretty()
+
+//5. Find all orders with an orderDate that is prior to 1/1/2016.
+db.orders.find({ orderDate: { $lt: ISODate("2016-01-01T00:00:00.000Z") }})
+
+//6. Find all orders with an orderDate that is after 1/1/2016.
+db.orders.find({ orderDate: { $gte: ISODate("2016-01-01T00:00:00.000Z") }})
+
+//7.Find orders with lineItems that have a quantity that is less than 50, but greater than 5.
+db.orders.find({ $and: [{"lineItems.quantity" : {$lt: 50}},  {"lineItems.quantity": {$gte: 5} }]} )
+
+// 8. Update one of your line items to 42.99. HINT: Look at dot notation
+db.orders.update( {_id: ObjectId("589a234391930bc237484363")}, {$set:{"lineItems.0.unitPrice": 42.99} } )
+
+//9. Remove one of your orders.
+db.orders.remove({ _id: ObjectId("589a22be91930bc237484362") })
